@@ -12,6 +12,7 @@ public class RegexConstants {
     public static final String PHONE_NUMBER_REGEX = "^\\d{9}$";
     public static final String NAME_REGEX = "^(?=\\s*\\S).*$";
     public static final String REGISTRATION_PLATE_REGEX = "^[A-Z]{2}\\d{5}$";
+    public static final String EMAIL_REGEX = "[A-Za-z0-9._%-+]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
     /*
         ^                 # start-of-string
         (?=.*[0-9])       # a digit must occur at least once

@@ -10,6 +10,8 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Builder
@@ -26,28 +28,34 @@ public class Reservation implements Serializable {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    UUID id;
+    private UUID id;
 
     @NotNull(message = "Reservation start date cannot be null")
     @Column
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @FutureOrPresent
-    LocalDate dateFrom;
+    private LocalDate dateFrom;
 
     @NotNull(message = "Reservation end date cannot be null")
     @Column
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Future
-    LocalDate dateTo;
+    private LocalDate dateTo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_vehicle", nullable = false)
     @NotNull(message = "Vehicle cannot be null")
-    Vehicle vehicle;
+    private Vehicle vehicle;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_customer", nullable = false)
     @NotNull(message = "Customer cannot be null")
-    Customer customer;
+    private Customer customer;
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @Builder.Default
+    private Set<Insurance> reservationInsurance = new HashSet<>();
 
 }

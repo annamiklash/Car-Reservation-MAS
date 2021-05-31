@@ -8,7 +8,7 @@ import pjatk.mas.MAS.model.Dimensions;
 import pjatk.mas.MAS.model.enums.YachtAmenitiesEnum;
 
 import javax.persistence.*;
-import java.util.Collection;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -17,7 +17,6 @@ import java.util.Set;
 @AllArgsConstructor
 @RequiredArgsConstructor
 @SuperBuilder
-//@TypeDef(typeClass = EnumSetType.class, name = "YachtAmenitiesEnum")
 @Entity(name = "yacht")
 public class Yacht extends Vehicle {
 
@@ -27,6 +26,7 @@ public class Yacht extends Vehicle {
     @LazyCollection(LazyCollectionOption.FALSE)
     Set<YachtAmenitiesEnum> amenities;
 
+    @NotNull
     @Embedded
     Dimensions yachtDimensions;
 }

@@ -8,7 +8,9 @@ import pjatk.mas.MAS.model.Dimensions;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @EqualsAndHashCode(callSuper = true)
@@ -25,10 +27,13 @@ public class Truck extends Vehicle {
     @Column(name = "registration_plate")
     String registrationPlate;
 
+    @NotNull
     @Embedded
     Dimensions trailerDimensions;
 
+    @NotNull
     @Column(name = "wheels_number")
+    @Min(4)
     Integer wheelsNumber;
 
 }
