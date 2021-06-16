@@ -12,6 +12,7 @@ import org.hibernate.validator.constraints.Length;
 import pjatk.mas.MAS.constants.RegexConstants;
 import pjatk.mas.MAS.interfaces.ElectricCar;
 import pjatk.mas.MAS.interfaces.FuelCar;
+import pjatk.mas.MAS.interfaces.HybridCar;
 import pjatk.mas.MAS.model.enums.CarAvailabilityEnum;
 import pjatk.mas.MAS.model.enums.CarBodyStyleEnum;
 import pjatk.mas.MAS.model.enums.CarEngineTypeEnum;

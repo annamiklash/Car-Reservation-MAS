@@ -14,8 +14,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "PAYMENT_TYPE")
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity(name = "payment")
 public class Payment {
 

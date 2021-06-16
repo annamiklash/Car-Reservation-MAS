@@ -3,7 +3,6 @@ package pjatk.mas.MAS.model.dto;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.validation.constraints.Pattern;
 
@@ -13,7 +12,6 @@ import javax.validation.constraints.Pattern;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-@DiscriminatorValue("CC")
 @Entity
 public class CreditCardPayment extends Payment {
 

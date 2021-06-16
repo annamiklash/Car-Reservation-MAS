@@ -13,6 +13,7 @@ import pjatk.mas.MAS.repository.UserRepository;
 import pjatk.mas.MAS.validator.Error;
 import pjatk.mas.MAS.validator.UserValidator;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -51,7 +52,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-
+    @Transactional
     public User findCustomerById(Long id) {
         final Optional<User> optionalCustomer = userRepository.findCustomerById(id);
         if (optionalCustomer.isEmpty()) {
@@ -60,22 +61,22 @@ public class UserService {
         final User user = optionalCustomer.get();
         final boolean isVip = isVIPCustomer(user.getId());
 
-        return User.builder()
-                .id(user.getId())
-                .birthdate(user.getBirthdate())
-                .email(user.getEmail())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .phoneNumber(user.getPhoneNumber())
-                .username(user.getUsername())
-                .address(user.getAddress())
-                .customerReservations(user.getCustomerReservations())
-                .discount(isVip ? Constants.VIP_DISCOUNT : null)
-                .build();
+        if (isVip) {
+            user.setDiscount(Constants.VIP_DISCOUNT);
 
+        } else {
+            user.setDiscount(0);
+        }
+
+        return user;
     }
 
-    public Integer countCustomerFinishedReservations(long customerId) {
+    public boolean isVIPCustomer(long id) {
+        final Integer customerReservations = countCustomerFinishedReservations(id);
+        return customerReservations >= Constants.RESERVATIONS_FOR_VIP;
+    }
+
+    private Integer countCustomerFinishedReservations(long customerId) {
 
         final List<Reservation> allReservations = reservationRepository.findAllByUser_Id(customerId);
 
@@ -83,11 +84,6 @@ public class UserService {
                 .filter(reservation -> reservation.getReservationStatus() == ReservationStatusEnum.FINISHED)
                 .filter(reservation -> reservation.getDateFrom().isAfter(LocalDate.now().minusYears(1)))
                 .count());
-    }
-
-    public boolean isVIPCustomer(long id) {
-        final Integer customerReservations = countCustomerFinishedReservations(id);
-        return customerReservations >= Constants.RESERVATIONS_FOR_VIP;
     }
 
 }

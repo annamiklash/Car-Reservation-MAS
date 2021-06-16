@@ -1,4 +1,4 @@
-package pjatk.mas.MAS.model.dto;
+package pjatk.mas.MAS.interfaces;
 
 public interface HybridCar {
 

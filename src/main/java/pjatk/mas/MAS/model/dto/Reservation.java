@@ -67,7 +67,7 @@ public class Reservation implements Serializable {
 
     @OneToOne(cascade = CascadeType.REMOVE, optional = true, orphanRemoval = true)
     @JoinColumn(name = "id_bill", nullable = true)
-    private Bill bill;
+    private Invoice invoice;
 
     @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinTable(
@@ -80,7 +80,6 @@ public class Reservation implements Serializable {
     @EqualsAndHashCode.Exclude
     @JsonIgnore
     private Set<Insurance> insurances = new HashSet<>();
-
 
     public void addInsurance(@NotNull Insurance insurance) {
         insurances.add(insurance);

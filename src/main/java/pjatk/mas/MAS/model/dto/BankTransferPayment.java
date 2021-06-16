@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotBlank;
 
@@ -14,7 +13,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-@DiscriminatorValue("BANK")
 @Entity
 public class BankTransferPayment extends Payment {
 

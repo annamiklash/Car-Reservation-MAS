@@ -17,8 +17,8 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-@Entity(name = "bill")
-public class Bill {
+@Entity(name = "invoice")
+public class Invoice {
 
     @Id
     @Column(name = "id_bill")
