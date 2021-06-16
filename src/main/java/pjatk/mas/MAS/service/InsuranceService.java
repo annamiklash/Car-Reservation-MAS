@@ -16,8 +16,14 @@ public class InsuranceService {
 
     private final InsuranceRepository insuranceRepository;
 
-    public ImmutableList<Insurance> findALl() {
+
+    public ImmutableList<Insurance> findAll() {
         final List<Insurance> insurances = insuranceRepository.findAll();
         return ImmutableList.copyOf(insurances);
+    }
+
+
+    public void saveInsurance(Insurance insurance) {
+        insuranceRepository.save(insurance);
     }
 }

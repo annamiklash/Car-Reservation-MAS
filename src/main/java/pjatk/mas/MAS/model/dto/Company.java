@@ -1,5 +1,6 @@
 package pjatk.mas.MAS.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import pjatk.mas.MAS.constants.RegexConstants;
 
@@ -16,13 +17,12 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-@Table(name = "company")
 @Entity(name = "company")
 public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_address")
+    @Column(name = "id_company")
     private Long id;
 
     @NotBlank(message = "Company name cannot be null or empty")
@@ -49,7 +49,17 @@ public class Company {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @Builder.Default
+    @JsonIgnore
     private Set<RentalLocation> locations = new HashSet<>();
 
+    public void addLocation(RentalLocation rentalLocation) {
+        locations.add(rentalLocation);
+        rentalLocation.setHq(this);
+    }
+
+    public void removeLocation(RentalLocation rentalLocation) {
+        locations.remove(rentalLocation);
+        rentalLocation.setHq(null);
+    }
 
 }

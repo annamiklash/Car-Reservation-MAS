@@ -1,9 +1,8 @@
 package pjatk.mas.MAS.model.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import pjatk.mas.MAS.constants.RegexConstants;
 
 import javax.persistence.*;
@@ -11,19 +10,23 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 import java.math.BigInteger;
+import java.util.HashSet;
+import java.util.Set;
 
-@Builder
+@SuperBuilder
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
+//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity(name = "rental_location")
-public class RentalLocation {
+public class RentalLocation implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_rental_location")
-    Long id;
+    private Long id;
 
     @NotBlank(message = "Company name cannot be null or empty")
     @Pattern(regexp = RegexConstants.NAME_REGEX)
@@ -45,8 +48,25 @@ public class RentalLocation {
     @JoinColumn(name = "id_rental_location_address", nullable = false)
     private Address address;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_company", nullable = false)
     @NotNull(message = "HQ cannot be null")
-    Company hq;
+    private Company hq;
+
+    @OneToMany(mappedBy = "rentalLocation", cascade = CascadeType.REMOVE)
+    @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnore
+    private Set<Car> cars = new HashSet<>();
+
+
+    public void addCar(@NotNull Car car) {
+        cars.add(car);
+    }
+
+    public void removeCar(@NotNull Car car) {
+        cars.remove(car);
+    }
+
 }

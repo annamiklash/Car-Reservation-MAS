@@ -29,9 +29,15 @@ dependencies {
 	compile 'ch.qos.logback:logback-classic:1.2.3'
 	compile 'org.zalando:logbook-spring-boot-starter:2.1.4'
 	compile group: 'net.logstash.logback', name: 'logstash-logback-encoder', version: '6.4'
+//	testImplementation group: 'org.spf4j', name: 'spf4j-slf4j-test'
+//	testImplementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.0-alpha1'
 
 }
 
 test {
+	testLogging {
+		showStandardStreams true
+		exceptionFormat 'full'
+	}
 	useJUnitPlatform()
 }

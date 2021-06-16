@@ -1,43 +1,44 @@
 package pjatk.mas.MAS.model.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
-import java.math.BigInteger;
+import java.util.HashSet;
+import java.util.Set;
 
-@SuperBuilder
+@Builder
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "INSURANCE_TYPE")
 @Entity(name = "insurance")
-public class Insurance implements Serializable {
+@Table(name = "insurance")
+public class Insurance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_insurance")
     private Long id;
 
+    @NotNull
     @NotBlank(message = "Insurance name cannot be null or empty")
     private String name;
 
+    @NotNull
     @NotBlank(message = "Insurance description cannot be null or empty")
     private String description;
 
     @NotNull(message = "Insurance cost cannot be null")
     @Min(value = 1, message = "Insurance cost cannot be less than 1")
-    private BigInteger costPerDay;
+    private Integer costPerDay;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_reservation", nullable = false)
-    private Reservation owner;
+    @ManyToMany(mappedBy = "insurances", fetch = FetchType.LAZY)
+    @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Reservation> reservations = new HashSet<>();
+
 
 }
