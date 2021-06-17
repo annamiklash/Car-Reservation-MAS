@@ -10,8 +10,8 @@ import pjatk.mas.MAS.model.dto.User;
 import pjatk.mas.MAS.model.enums.ReservationStatusEnum;
 import pjatk.mas.MAS.repository.ReservationRepository;
 import pjatk.mas.MAS.repository.UserRepository;
-import pjatk.mas.MAS.validator.Error;
 import pjatk.mas.MAS.validator.UserValidator;
+import pjatk.mas.MAS.validator.model.Error;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;

@@ -3,6 +3,7 @@ package pjatk.mas.MAS.validator;
 import lombok.experimental.UtilityClass;
 import pjatk.mas.MAS.model.dto.Car;
 import pjatk.mas.MAS.model.enums.CarEngineTypeEnum;
+import pjatk.mas.MAS.validator.model.Error;
 
 import java.util.ArrayList;
 import java.util.List;

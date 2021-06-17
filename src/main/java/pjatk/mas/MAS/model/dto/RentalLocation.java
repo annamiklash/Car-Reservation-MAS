@@ -3,6 +3,7 @@ package pjatk.mas.MAS.model.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.format.annotation.DateTimeFormat;
 import pjatk.mas.MAS.constants.RegexConstants;
 
 import javax.persistence.*;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,6 +44,16 @@ public class RentalLocation implements Serializable {
     @Column(name = "phone_number")
     @Digits(integer = 9, fraction = 0)
     private BigInteger phoneNumber;
+
+    @DateTimeFormat(pattern = "MM/dd/yyyy HH:mm")
+    private LocalDateTime openingDateTime;
+
+
+    @ElementCollection
+    @CollectionTable(name = "business_hours", joinColumns = @JoinColumn(name = "id_rental_location"))
+    @Builder.Default
+    private Set<BusinessHours> businessHours = new HashSet<>();
+
 
     @NotNull(message = "Company address cannot be null")
     @OneToOne(cascade = CascadeType.ALL)

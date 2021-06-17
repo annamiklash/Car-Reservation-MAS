@@ -10,7 +10,7 @@ import pjatk.mas.MAS.model.dto.RentalLocation;
 import pjatk.mas.MAS.model.enums.CarAvailabilityEnum;
 import pjatk.mas.MAS.repository.CarRepository;
 import pjatk.mas.MAS.validator.CarValidator;
-import pjatk.mas.MAS.validator.Error;
+import pjatk.mas.MAS.validator.model.Error;
 
 import java.time.LocalDate;
 import java.util.List;

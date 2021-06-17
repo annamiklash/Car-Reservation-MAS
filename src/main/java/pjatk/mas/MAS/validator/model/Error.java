@@ -1,4 +1,4 @@
-package pjatk.mas.MAS.validator;
+package pjatk.mas.MAS.validator.model;
 
 import lombok.Builder;
 import lombok.ToString;

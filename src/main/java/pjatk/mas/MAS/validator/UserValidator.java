@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import pjatk.mas.MAS.model.dto.User;
 import pjatk.mas.MAS.model.enums.AdminAccessLevel;
 import pjatk.mas.MAS.model.enums.UserType;
+import pjatk.mas.MAS.validator.model.Error;
 
 import java.util.ArrayList;
 import java.util.List;

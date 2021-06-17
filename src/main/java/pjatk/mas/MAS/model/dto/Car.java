@@ -4,15 +4,14 @@ package pjatk.mas.MAS.model.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 import org.hibernate.validator.constraints.Length;
 import pjatk.mas.MAS.constants.RegexConstants;
-import pjatk.mas.MAS.interfaces.ElectricCar;
-import pjatk.mas.MAS.interfaces.FuelCar;
-import pjatk.mas.MAS.interfaces.HybridCar;
+import pjatk.mas.MAS.interfaces.car.ElectricCar;
+import pjatk.mas.MAS.interfaces.car.FuelCar;
+import pjatk.mas.MAS.interfaces.car.HybridCar;
 import pjatk.mas.MAS.model.enums.CarAvailabilityEnum;
 import pjatk.mas.MAS.model.enums.CarBodyStyleEnum;
 import pjatk.mas.MAS.model.enums.CarEngineTypeEnum;
@@ -37,9 +36,7 @@ import java.util.Set;
         )
 })
 @Entity(name = "car")
-@SuperBuilder
-@Inheritance(strategy = InheritanceType.JOINED) //joined
-//@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+@Builder
 public class Car implements Serializable, FuelCar, ElectricCar, HybridCar {
 
     @Id
@@ -184,7 +181,6 @@ public class Car implements Serializable, FuelCar, ElectricCar, HybridCar {
     public Integer getMilesPerCharge() {
         return milesPerCharge;
     }
-
     @Override
     public Integer getMilesPerGallon() {
         return milesPerGallon;

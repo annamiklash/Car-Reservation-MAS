@@ -1,4 +1,4 @@
-package pjatk.mas.MAS.interfaces;
+package pjatk.mas.MAS.interfaces.car;
 
 public interface HybridCar {
 

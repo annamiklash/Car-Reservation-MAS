@@ -5,10 +5,10 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 import pjatk.mas.MAS.constants.RegexConstants;
-import pjatk.mas.MAS.interfaces.Admin;
-import pjatk.mas.MAS.interfaces.Customer;
-import pjatk.mas.MAS.interfaces.Employee;
-import pjatk.mas.MAS.interfaces.VIP;
+import pjatk.mas.MAS.interfaces.user.Admin;
+import pjatk.mas.MAS.interfaces.user.Customer;
+import pjatk.mas.MAS.interfaces.user.Employee;
+import pjatk.mas.MAS.interfaces.user.VIP;
 import pjatk.mas.MAS.model.enums.AdminAccessLevel;
 import pjatk.mas.MAS.model.enums.UserType;
 
