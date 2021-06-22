@@ -1,0 +1,14 @@
+body{ padding: 20px; }
+
+h1, form {
+    padding-top: 5%;
+}
+
+#end {
+    padding-left: 20px;
+}
+
+label {
+    padding-right: 7px;
+}
+

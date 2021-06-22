@@ -53,7 +53,8 @@ public class Reservation implements Serializable {
     @NotNull(message = "Reservation status cannot be null")
     @Enumerated(EnumType.STRING)
     @Column
-    private ReservationStatusEnum reservationStatus;
+    @Builder.Default
+    private ReservationStatusEnum reservationStatus = ReservationStatusEnum.COMPLETE;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_car", nullable = false)

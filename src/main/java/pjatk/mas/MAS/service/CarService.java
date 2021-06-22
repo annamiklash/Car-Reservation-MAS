@@ -5,12 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pjatk.mas.MAS.model.dto.Car;
+import pjatk.mas.MAS.model.dto.ElectricCarImpl;
 import pjatk.mas.MAS.model.dto.MechanicsShop;
 import pjatk.mas.MAS.model.dto.RentalLocation;
 import pjatk.mas.MAS.model.enums.CarAvailabilityEnum;
 import pjatk.mas.MAS.repository.CarRepository;
-import pjatk.mas.MAS.validator.CarValidator;
-import pjatk.mas.MAS.validator.model.Error;
+import pjatk.mas.MAS.repository.ElectricCarRepository;
+import pjatk.mas.MAS.repository.HybridCarRepository;
+import pjatk.mas.MAS.repository.ICECarRepository;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,6 +28,11 @@ public class CarService {
     private final MechanicsShopService mechanicsShopService;
     private final RentalLocationService rentalLocationService;
 
+    private final ICECarRepository iceCarRepository;
+    private final HybridCarRepository hybridCarRepository;
+    private final ElectricCarRepository electricCarRepository;
+
+
     public ImmutableList<Car> findAll() {
         final List<Car> carList = carRepository.findAll();
         return ImmutableList.copyOf(carList);
@@ -37,14 +44,15 @@ public class CarService {
     }
 
     public void saveCar(Car car) {
-        final List<Error> errorList = CarValidator.validateCarToCreate(car);
-
-        if (errorList.size() > 0) {
-            throw new RuntimeException(errorList.toString());
-        }
+//        final List<Error> errorList = CarValidator.validateCarToCreate(car);
+//
+//        if (errorList.size() > 0) {
+//            throw new RuntimeException(errorList.toString());
+//        }
 
         carRepository.save(car);
     }
+
 
 
     public Car findById(long id) {
@@ -52,14 +60,14 @@ public class CarService {
         if (optionalCar.isEmpty()) {
             throw new RuntimeException("No car with id " + id);
         }
+
         return optionalCar.get();
     }
 
-
-//    public ImmutableList<ElectricCarImpl> findAllElectric() {
-//        final List<ElectricCarImpl> all = electricCarRepository.findAllElectricCars();
-//        return ImmutableList.copyOf(all);
-//    }
+    public ImmutableList<ElectricCarImpl> findAllElectric() {
+        final List<ElectricCarImpl> all = electricCarRepository.findAllElectric();
+        return ImmutableList.copyOf(all);
+    }
 
     public ImmutableList<Car> findAllAvailableCarsByRentalLocationId(Long id, LocalDate from, LocalDate to) {
         List<Car> carsList = carRepository.findAllByRentalLocation_Id(id, from, to);

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+    <script th:src="@{/js/index.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/carDetails.css}">
+</head>
+<body>
+<div class="d-flex align-items-center justify-content-center">
+    <div class="p-2 bd-highlight col-example">
+        <label for="from">Pick up date:</label>
+        <input type="text" id="from" name="from" th:value="${session.reservation.dateFrom.toString()}" disabled> <br><br>
+    </div>
+    <div class=" p-2 bd-highlight col-example">
+        <label for="to">Drop off date:</label>
+        <input type="text" id="to" name="to" th:value="${session.reservation.dateTo.toString()}" disabled><br><br>
+    </div>
+</div>
+<div class="text-center">
+    <h1>Car Details</h1>
+</div>
+<div style=" width: 600px; display: table-cell;" id="forth-column">
+    <div class="row">
+        <div class="col-6 col-sm-4 offset-sm-1  value">
+            <div th:text="${session.location.name}"></div>
+            <div th:text="${session.location.address.streetName} + ' '+ ${session.location.address.streetNumber} + ', ' + ${session.location.address.city}"></div>
+            <div th:text="${session.location.address.zipCode}"></div>
+        </div>
+    </div>
+</div><br>
+<div class="container">
+    <div id="mainInfo">
+        <div class="car-make" th:text="${session.reservation.car.make}"></div>
+        <div class="car-model" th:text="${session.reservation.car.model}"></div>
+        <div class="car-style" th:text="${session.reservation.car.bodyStyle}"></div>
+    </div>
+</div>
+<div class="container" style="width: 100%; display: table;">
+    <div style="display: table-row;">
+        <div style="width: 600px; display: table-cell;" id="first-column">
+            <div class="row">
+                <div class="col-6 col-sm-4 attribute">Daily Rent Cost</div>
+                <div class="col-6 col-sm-3 value" th:text="${session.reservation.car.dailyRentCost}"></div>
+
+                <!-- Force next columns to break to new line -->
+                <div class="w-100"></div>
+
+                <div class="col-6 col-sm-4 attribute">Manufacture Year</div>
+                <div class="col-6 col-sm-3 value" th:text="${session.reservation.car.manufactureYear}"></div>
+
+                <!-- Force next columns to break to new line -->
+                <div class="w-100"></div>
+                <div class="col-6 col-sm-4 attribute">Passenger Capacity</div>
+                <div class="col-6 col-sm-3 value" th:text="${session.reservation.car.passengerCapacity}"></div>
+            </div>
+        </div>
+        <div style=" width: 600px; display: table-cell;" id="second-column">
+            <div class="row">
+                <div class="col-6 col-sm-4 attribute">Engine Type</div>
+                <div class="col-6 col-sm-3 value" th:text="${session.reservation.car.getDecriminatorValue()}"></div>
+
+                <div class="w-100"></div>
+
+                <div class="col-6 col-sm-4 attribute">Color(s)</div>
+                <div class="col-6 col-sm-4 value" th:each="item : ${session.reservation.car.color}" th:text="|${item}|"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br>
+
+<div class="container">
+    <p id="additional-info-text">ADDITIONAL INFORMATION</p>
+    <div style="display: table-row;">
+        <div style="width: 600px; display: table-cell;" id="additional-info">
+            <div class="row">
+                <div class="col-6 col-sm-4 attribute">Horse Power</div>
+                <div class="col-6 col-sm-3 value" th:text="${session.reservation.car.horsePower}"></div>
+
+                <div class="w-100"></div>
+
+                <div class="col-6 col-sm-4 attribute">Last Maintenance Date</div>
+                <div class="col-6 col-sm-3 value" th:text="${session.reservation.car.lastMaintenanceInfo.inspectionDate}"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="text-center">
+    <button type="button" class="btn btn-primary" th:onclick="'javascript:carReserved();'">
+        Reserve
+    </button>
+</div>
+<!--    <h4 th:text=" ${car.toString}"></h4>-->
+
+</body>
+</html>

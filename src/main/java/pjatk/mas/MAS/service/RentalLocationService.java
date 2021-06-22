@@ -5,11 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pjatk.mas.MAS.model.dto.BusinessHours;
-import pjatk.mas.MAS.model.dto.OpenLocation;
 import pjatk.mas.MAS.model.dto.RentalLocation;
 import pjatk.mas.MAS.repository.RentalLocationRepository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -28,16 +26,6 @@ public class RentalLocationService {
         return ImmutableList.copyOf(all);
     }
 
-//    public ImmutableList<RentalLocation> findAllOpen() {
-//        final List<RentalLocation> all = rentalLocationRepository.findAllOpen();
-//        return ImmutableList.copyOf(all);
-//    }
-//
-//    public ImmutableList<RentalLocation> findAllClosed() {
-//        final List<RentalLocation> all = rentalLocationRepository.findAllClosed();
-//        return ImmutableList.copyOf(all);
-//    }
-
     public RentalLocation findById(long id) {
         final Optional<RentalLocation> optionalRentalLocation = rentalLocationRepository.findById(id);
         if (optionalRentalLocation.isEmpty()) {
@@ -50,12 +38,12 @@ public class RentalLocationService {
         rentalLocationRepository.save(rentalLocation);
     }
 
-    public void temporarilyCloseLocation(OpenLocation location, LocalDateTime openingDateTime) {
-        if (location.getBusinessHours() == null) {
-            throw new RuntimeException("Cannot close already closed location");
-        }
-        location.setBusinessHours(null);
-    }
+//    public void temporarilyCloseLocation(OpenLocation location, LocalDateTime openingDateTime) {
+//        if (location.getBusinessHours() == null) {
+//            throw new RuntimeException("Cannot close already closed location");
+//        }
+//        location.setBusinessHours(null);
+//    }
 
 //    public void openLocation(TemporarilyClosedLocation location, Set<BusinessHours> businessHours) {
 //        if (location.getOpeningDateTime() == null) {

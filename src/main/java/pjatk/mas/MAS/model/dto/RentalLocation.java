@@ -48,12 +48,11 @@ public class RentalLocation implements Serializable {
     @DateTimeFormat(pattern = "MM/dd/yyyy HH:mm")
     private LocalDateTime openingDateTime;
 
-
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "business_hours", joinColumns = @JoinColumn(name = "id_rental_location"))
     @Builder.Default
+    @ToString.Exclude
     private Set<BusinessHours> businessHours = new HashSet<>();
-
 
     @NotNull(message = "Company address cannot be null")
     @OneToOne(cascade = CascadeType.ALL)

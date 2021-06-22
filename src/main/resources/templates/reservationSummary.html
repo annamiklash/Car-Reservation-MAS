@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+    <script th:src="@{/js/index.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/reservationSummary.css}">
+</head>
+<body>
+<div class="text-center">
+    <h1>Reservation Summary</h1>
+</div>
+<form action="#" th:action="@{/test/reservation}" th:object="${reservation}" th:method="post">
+    <div class="container" style="width: 100%; display: table;">
+        <div style="display: table-row;">
+            <div style="width: 600px; display: table-cell;" id="first-column">
+                <div class="row">
+                    <div class="car-make" th:text="${session.reservation.car.make}"></div>
+                    <div class="car-model" th:text="${session.reservation.car.model}"></div>
+                    <div class="car-style" th:text="${session.reservation.car.bodyStyle}"></div>
+                    <div class="car-style" th:text="${session.reservation.car.dailyRentCost} + 'zl/day'"></div>
+                </div>
+            </div>
+            <div style=" width: 600px; display: table-cell;" id="second-column">
+                <div class="row">
+                    <div class="col-6 col-sm-4 attribute">Insurance(s)</div>
+                    <ul id="insurance-list" th:each="insurance : ${session.reservation.insurances}  ">
+                        <li>
+                            <div th:text="${insurance.name}"></div>
+                            <div th:text="${insurance.costPerDay} + 'zl/day'"></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div style=" width: 600px; display: table-cell;" id="third-column">
+                <div class="row">
+                    <div class="col-6 col-sm-4 attribute">Your Info</div>
+                    <div th:text="${session.reservation.user.username}"></div>
+                    <div th:text="${session.reservation.user.firstName} + ' ' + ${session.reservation.user.lastName}"></div>
+                    <div th:text="${session.reservation.user.email}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container" style="width: 100%; display: table;">
+        <div style="display: table-row;">
+            <div style="width: 600px; display: table-cell;" id="bottom-left">
+                <div class="row">
+                    <div class="col-6 col-sm-4 attribute">Pick Up Date</div>
+                    <div id="pick-up" class="col-6 col-sm-3 value" th:text="${session.reservation.dateFrom}"></div>
+
+                    <!-- Force next columns to break to new line -->
+                    <div class="w-100"></div>
+
+                    <div class="col-6 col-sm-4 attribute">Drop Off Date</div>
+                    <div id="drop-off" class="col-6 col-sm-3 value" th:text="${session.reservation.dateTo}"></div>
+
+                    <!-- Force next columns to break to new line -->
+                    <div class="w-100"></div>
+
+                    <div class="col-6 col-sm-4 attribute">Total Days</div>
+                    <div class="col-6 col-sm-3 value" th:text="${days}"></div>
+
+                    <!-- Force next columns to break to new line -->
+                    <div class="w-100"></div>
+
+                    <div class="col-6 col-sm-4 attribute">Number of Passengers</div>
+                    <div class="col-6 col-sm-3 value">
+                        <input type="number" min="1" th:max="${maxPassengers}" th:field="*{totalPeopleNumber}"
+                               class="form-control"
+                               id="passenger-input" style="width: 50%"/>
+                    </div>
+
+                </div>
+            </div>
+            <div style=" width: 600px; display: table-cell;" id="bottom-right">
+                <div class="row">
+                    <div class="col-6 col-sm-4 attribute">Pick up Location</div>
+                    <div class="col-6 col-sm-4 value">
+                        <div th:text="${session.location.name}"></div>
+                        <div th:text="${session.location.address.streetName} + ' '+ ${session.location.address.streetNumber} + ', ' + ${session.location.address.city}"></div>
+                        <div th:text="${session.location.address.zipCode}"></div>
+                    </div>
+
+                    <div class="w-100"></div>
+
+                    <div class="col-6 col-sm-4 attribute">Hours of Operation</div>
+                    <div class="col-6 col-sm-7 value">
+                        <div class="container" style="width: 100%; display: table;">
+                            <div style="display: table-row;">
+                                <div style="width: 200px; display: table-cell;">
+                                    <div class="row" th:each="day: ${session.location.businessHours}">
+                                        <div class="col-6 col-xs-5 attribute" th:text="${day.day}"></div>
+                                        <div class="col-6 col-xs-5 value"
+                                             th:text="${day.timeFrom} + ' - ' + ${day.timeTo}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-primary">Confirm</button>
+    </div>
+</form>
+</body>
+</html>

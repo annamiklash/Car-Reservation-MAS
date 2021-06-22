@@ -49,4 +49,9 @@ public class Address implements Serializable {
     @Column(name = "zip_code")
     String zipCode;
 
+    @Override
+    public String toString() {
+        return streetName + " " + streetNumber + ", " + city + " " + zipCode;
+    }
+
 }

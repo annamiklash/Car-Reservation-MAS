@@ -23,13 +23,14 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 
     List<Car> findAllByMechanicsShop_Id(long id);
 
-    @Query("select c from car c where c.engineTypeEnum='ELECTRIC'")
-    List<Car> findAllElectric();
+//    @Query("select c from car c where c.engineTypeEnum='ELECTRIC'")
+//    List<Car> findAllElectric();
+//
+//    @Query("select c from car c where c.engineTypeEnum='FUEL'")
+//    List<Car> findAllFuel();
+//
+//    @Query("select c from car c where c.engineTypeEnum='HYBRID'")
+//    List<Car> findAllHybrid();
 
-    @Query("select c from car c where c.engineTypeEnum='FUEL'")
-    List<Car> findAllFuel();
-
-    @Query("select c from car c where c.engineTypeEnum='HYBRID'")
-    List<Car> findAllHybrid();
 
 }

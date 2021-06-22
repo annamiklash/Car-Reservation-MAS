@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" th:href="@{/css/index.css}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script th:src="@{/js/index.js}"></script>
+</head>
+<body>
+<div class="text-center" >
+    <h1>Choose Rental Location</h1>
+</div>
+<br><br>
+<table class="table table-hover d-flex flex-row justify-content-center align-items-center" id="location-table">
+    <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>Phone</th>
+        <th>Email</th>
+    </tr>
+    <tr th:each="location: ${locations}" th:onclick="'javascript:rowClicked(\'' + ${location.id} + '\');'">
+        <td th:text="${location.name}"></td>
+        <td th:text="${location.address.toString}"></td>
+        <td th:text="${location.phoneNumber}"></td>
+        <td th:text="${location.email}"></td>
+    </tr>
+</table>
+
+</body>

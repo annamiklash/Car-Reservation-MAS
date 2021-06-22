@@ -1,0 +1,21 @@
+.attribute {
+    font-weight: bold;
+}
+
+#additional-info-text {
+    font-weight: bold;
+}
+
+.car-make, .car-model {
+    font-weight: bold;
+}
+
+#bottom-left, #bottom-left {
+    padding-top: 20px;
+}
+
+
+h1 {
+    padding-top: 5%;
+    padding-bottom: 2%;
+}

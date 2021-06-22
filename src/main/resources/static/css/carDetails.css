@@ -1,0 +1,11 @@
+.attribute {
+    font-weight: bold;
+}
+
+#additional-info-text {
+    font-weight: bold;
+}
+
+.car-make, .car-model {
+    font-weight: bold;
+}

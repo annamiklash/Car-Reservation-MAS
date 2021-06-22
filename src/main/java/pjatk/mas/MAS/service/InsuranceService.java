@@ -8,6 +8,7 @@ import pjatk.mas.MAS.model.dto.Insurance;
 import pjatk.mas.MAS.repository.InsuranceRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -20,6 +21,14 @@ public class InsuranceService {
     public ImmutableList<Insurance> findAll() {
         final List<Insurance> insurances = insuranceRepository.findAll();
         return ImmutableList.copyOf(insurances);
+    }
+
+    public Insurance findById(Long id) {
+        final Optional<Insurance> optionalInsurance = insuranceRepository.findById(id);
+        if (optionalInsurance.isEmpty()) {
+            throw new RuntimeException("INsurance list null or empty");
+        }
+        return optionalInsurance.get();
     }
 
 

@@ -4,17 +4,14 @@ package pjatk.mas.MAS.model.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vladmihalcea.hibernate.type.array.StringArrayType;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 import org.hibernate.validator.constraints.Length;
 import pjatk.mas.MAS.constants.RegexConstants;
-import pjatk.mas.MAS.interfaces.car.ElectricCar;
-import pjatk.mas.MAS.interfaces.car.FuelCar;
-import pjatk.mas.MAS.interfaces.car.HybridCar;
 import pjatk.mas.MAS.model.enums.CarAvailabilityEnum;
 import pjatk.mas.MAS.model.enums.CarBodyStyleEnum;
-import pjatk.mas.MAS.model.enums.CarEngineTypeEnum;
 import pjatk.mas.MAS.model.enums.CarFeatureEnum;
 
 import javax.persistence.*;
@@ -36,8 +33,9 @@ import java.util.Set;
         )
 })
 @Entity(name = "car")
-@Builder
-public class Car implements Serializable, FuelCar, ElectricCar, HybridCar {
+@DiscriminatorColumn(name = "TYPE")
+@SuperBuilder
+public class Car implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -83,11 +81,6 @@ public class Car implements Serializable, FuelCar, ElectricCar, HybridCar {
     @Column
     private CarBodyStyleEnum bodyStyle;
 
-    @NotNull(message = "Car engine type cannot be null")
-    @Enumerated(EnumType.STRING)
-    @Column
-    private CarEngineTypeEnum engineTypeEnum;
-
     @NotNull(message = "Car daily rent cost cannot be null")
     @Column
     @Min(1)
@@ -107,22 +100,6 @@ public class Car implements Serializable, FuelCar, ElectricCar, HybridCar {
     @NotNull
     @Embedded
     private LastMaintenanceInfo lastMaintenanceInfo;
-
-    @Min(1)
-    @Column(name = "exhaust_pipes")
-    private Integer exhaustPipes;
-
-    @Min(1)
-    @Column(name = "miles_per_gallon")
-    private Integer milesPerGallon;
-
-
-    @Min(1)
-    @Column(name = "miles_per_charge")
-    private Integer milesPerCharge;
-
-    private Boolean isSelfDriving;
-
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
     @ToString.Exclude
@@ -166,23 +143,10 @@ public class Car implements Serializable, FuelCar, ElectricCar, HybridCar {
     @JoinColumn(name = "id_mechanics_shop", nullable = true)
     private MechanicsShop mechanicsShop;
 
-
-    @Override
-    public Boolean getSelfDriving() {
-        return isSelfDriving;
+    @Transient
+    public String getDecriminatorValue() {
+        return this.getClass().getAnnotation(DiscriminatorValue.class).value();
     }
 
-    @Override
-    public Integer getExhaustPipes() {
-        return exhaustPipes;
-    }
 
-    @Override
-    public Integer getMilesPerCharge() {
-        return milesPerCharge;
-    }
-    @Override
-    public Integer getMilesPerGallon() {
-        return milesPerGallon;
-    }
 }
