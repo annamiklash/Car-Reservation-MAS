@@ -1,4 +1,4 @@
-package pjatk.mas.MAS.interfaces.user;
+package pjatk.mas.MAS.model.dto.interfaces.user;
 
 public interface VIP extends Customer {
 

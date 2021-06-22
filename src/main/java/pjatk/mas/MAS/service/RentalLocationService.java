@@ -6,13 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import pjatk.mas.MAS.model.dto.BusinessHours;
 import pjatk.mas.MAS.model.dto.RentalLocation;
+import pjatk.mas.MAS.model.enums.LocationTypeEnum;
 import pjatk.mas.MAS.repository.RentalLocationRepository;
+import pjatk.mas.MAS.validator.BusinessHoursValidator;
+import pjatk.mas.MAS.validator.model.Error;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -38,55 +40,31 @@ public class RentalLocationService {
         rentalLocationRepository.save(rentalLocation);
     }
 
-//    public void temporarilyCloseLocation(OpenLocation location, LocalDateTime openingDateTime) {
-//        if (location.getBusinessHours() == null) {
-//            throw new RuntimeException("Cannot close already closed location");
-//        }
-//        location.setBusinessHours(null);
-//    }
-
-//    public void openLocation(TemporarilyClosedLocation location, Set<BusinessHours> businessHours) {
-//        if (location.getOpeningDateTime() == null) {
-//            throw new RuntimeException("Cannot open already open location");
-//        }
-//        if (!isBusinessHoursValid(businessHours)) {
-//            throw new RuntimeException("Invalid business hours");
-//        }
-//        location.setOpeningDateTime(null);
-//
-//        final OpenLocation openLocation = OpenLocation.builder()
-//                .id(location.getId())
-//                .businessHours(businessHours)
-//                .name(location.getName())
-//                .email(location.getEmail())
-//                .phoneNumber(location.getPhoneNumber())
-//                .address(location.getAddress())
-//                .hq(location.getHq())
-//                .build();
-//
-//        rentalLocationRepository.delete(location);
-//        rentalLocationRepository.save(openLocation);
-//
-//    }
-
-    private boolean isBusinessHoursValid(Set<BusinessHours> businessHours) {
-        if (!isCorrectSize(businessHours)) {
-            return false;
+    public void temporarilyCloseLocation(RentalLocation location, LocalDateTime openingDateTime) {
+        if (location.getBusinessHours() == null || location.getLocationType() == LocationTypeEnum.CLOSED) {
+            throw new RuntimeException("Cannot close already closed location");
         }
-        return !containsDuplicates(businessHours);
+        location.setBusinessHours(null);
+        location.setOpeningDateTime(openingDateTime);
+        location.setLocationType(LocationTypeEnum.CLOSED);
+
+        saveLocation(location);
     }
 
-    private boolean containsDuplicates(Set<BusinessHours> businessHours) {
-        return businessHours.stream()
-                .map(BusinessHours::getDay)
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))    // create a map {1=1, 2=1, 3=2, 4=2, 5=1, 7=1, 9=2}
-                .entrySet()
-                .stream()
-                .anyMatch(m -> m.getValue() > 1);
-    }
+    public void openLocation(RentalLocation location, Set<BusinessHours> businessHours) {
+        if (location.getOpeningDateTime() == null || location.getLocationType() == LocationTypeEnum.OPEN) {
+            throw new RuntimeException("Cannot open already open location");
+        }
 
-    private boolean isCorrectSize(Set<BusinessHours> businessHours) {
-        return businessHours.size() >= 5 && businessHours.size() <= 7;
-    }
+        final List<Error> errors = BusinessHoursValidator.validateBusinessHoursSet(businessHours);
+        if (errors.size() > 0) {
+            throw new RuntimeException(errors.toString());
+        }
 
+        location.setOpeningDateTime(null);
+        location.setBusinessHours(businessHours);
+        location.setLocationType(LocationTypeEnum.OPEN);
+
+        saveLocation(location);
+    }
 }

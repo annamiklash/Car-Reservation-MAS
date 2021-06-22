@@ -5,6 +5,9 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.format.annotation.DateTimeFormat;
 import pjatk.mas.MAS.constants.RegexConstants;
+import pjatk.mas.MAS.model.dto.interfaces.location.OpenLocation;
+import pjatk.mas.MAS.model.dto.interfaces.location.TemporarilyClosedLocation;
+import pjatk.mas.MAS.model.enums.LocationTypeEnum;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
@@ -21,9 +24,8 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-//@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Entity(name = "rental_location")
-public class RentalLocation implements Serializable {
+public class RentalLocation implements Serializable, OpenLocation, TemporarilyClosedLocation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +46,11 @@ public class RentalLocation implements Serializable {
     @Column(name = "phone_number")
     @Digits(integer = 9, fraction = 0)
     private BigInteger phoneNumber;
+
+    @NotNull(message = "Location type cannot be null")
+    @Enumerated(EnumType.STRING)
+    @Column
+    private LocationTypeEnum locationType;
 
     @DateTimeFormat(pattern = "MM/dd/yyyy HH:mm")
     private LocalDateTime openingDateTime;
@@ -71,7 +78,6 @@ public class RentalLocation implements Serializable {
     @JsonIgnore
     private Set<Car> cars = new HashSet<>();
 
-
     public void addCar(@NotNull Car car) {
         cars.add(car);
     }
@@ -80,4 +86,25 @@ public class RentalLocation implements Serializable {
         cars.remove(car);
     }
 
+    @Override
+    public LocalDateTime getOpeningDateTime() {
+        return openingDateTime;
+    }
+
+    @Override
+    public void setOpeningDateTime(LocalDateTime openingDateTime) {
+        this.openingDateTime = openingDateTime;
+    }
+
+    @Override
+    public Set<BusinessHours> getBusinessHours() {
+        return businessHours;
+    }
+
+    @Override
+    public void setBusinessHours(Set<BusinessHours> businessHours) {
+        this.businessHours = businessHours;
+    }
 }
+
+
