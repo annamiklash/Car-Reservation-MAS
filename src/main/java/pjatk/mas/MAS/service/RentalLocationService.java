@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import pjatk.mas.MAS.model.dto.BusinessHours;
 import pjatk.mas.MAS.model.dto.RentalLocation;
 import pjatk.mas.MAS.model.enums.LocationTypeEnum;
+import pjatk.mas.MAS.model.exceptions.CustomErrorException;
 import pjatk.mas.MAS.repository.RentalLocationRepository;
 import pjatk.mas.MAS.validator.BusinessHoursValidator;
 import pjatk.mas.MAS.validator.model.Error;
@@ -23,15 +24,19 @@ public class RentalLocationService {
 
     private final RentalLocationRepository rentalLocationRepository;
 
-    public ImmutableList<RentalLocation> findAll() {
+    public ImmutableList<RentalLocation> findAllLocations() {
         final List<RentalLocation> all = rentalLocationRepository.findAll();
         return ImmutableList.copyOf(all);
     }
 
-    public RentalLocation findById(long id) {
+    public RentalLocation findLocationById(long id) {
         final Optional<RentalLocation> optionalRentalLocation = rentalLocationRepository.findById(id);
         if (optionalRentalLocation.isEmpty()) {
-            throw new RuntimeException("No rental location with id " + id);
+            throw new CustomErrorException(Error.builder()
+                    .field("id")
+                    .field(String.valueOf(id))
+                    .description("No rental location with id " + id)
+                    .build());
         }
         return optionalRentalLocation.get();
     }
@@ -42,7 +47,11 @@ public class RentalLocationService {
 
     public void temporarilyCloseLocation(RentalLocation location, LocalDateTime openingDateTime) {
         if (location.getBusinessHours() == null || location.getLocationType() == LocationTypeEnum.CLOSED) {
-            throw new RuntimeException("Cannot close already closed location");
+            throw new CustomErrorException(Error.builder()
+                    .field("businessHours or locationTypeEnum")
+                    .value("null or LocationTypeEnum.CLOSED")
+                    .description("Cannot close already closed location")
+                    .build());
         }
         location.setBusinessHours(null);
         location.setOpeningDateTime(openingDateTime);
@@ -53,12 +62,16 @@ public class RentalLocationService {
 
     public void openLocation(RentalLocation location, Set<BusinessHours> businessHours) {
         if (location.getOpeningDateTime() == null || location.getLocationType() == LocationTypeEnum.OPEN) {
-            throw new RuntimeException("Cannot open already open location");
+            throw new CustomErrorException(Error.builder()
+                    .field("openingDateTime or locationTypeEnum")
+                    .value("null or LocationTypeEnum.OPEN")
+                    .description("Cannot open already open location")
+                    .build());
         }
 
         final List<Error> errors = BusinessHoursValidator.validateBusinessHoursSet(businessHours);
         if (errors.size() > 0) {
-            throw new RuntimeException(errors.toString());
+            throw new CustomErrorException(errors);
         }
 
         location.setOpeningDateTime(null);

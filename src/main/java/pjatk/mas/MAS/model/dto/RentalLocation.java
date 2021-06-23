@@ -71,6 +71,13 @@ public class RentalLocation implements Serializable, OpenLocation, TemporarilyCl
     @NotNull(message = "HQ cannot be null")
     private Company hq;
 
+    @OneToMany(mappedBy = "workplace", cascade = CascadeType.REMOVE)
+    @Builder.Default
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @JsonIgnore
+    private Set<User> employees = new HashSet<>();
+
     @OneToMany(mappedBy = "rentalLocation", cascade = CascadeType.REMOVE)
     @Builder.Default
     @ToString.Exclude

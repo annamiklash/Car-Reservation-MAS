@@ -12,6 +12,7 @@ import org.hibernate.validator.constraints.Length;
 import pjatk.mas.MAS.constants.RegexConstants;
 import pjatk.mas.MAS.model.enums.CarAvailabilityEnum;
 import pjatk.mas.MAS.model.enums.CarBodyStyleEnum;
+import pjatk.mas.MAS.model.enums.CarEngineTypeEnum;
 import pjatk.mas.MAS.model.enums.CarFeatureEnum;
 
 import javax.persistence.*;
@@ -66,6 +67,11 @@ public class Car implements Serializable {
     @Enumerated(EnumType.STRING)
     @Column
     private CarAvailabilityEnum availability;
+
+    @NotNull(message = "Engine type cannot be null")
+    @Enumerated(EnumType.STRING)
+    @Transient
+    private CarEngineTypeEnum engineType;
 
     @NotNull(message = "Car manufacture year is mandatory")
     @Min(1900)

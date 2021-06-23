@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Serving Web Content</title>
+    <title>Reserve a Car</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -11,7 +11,7 @@
     <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
     <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css"/>
     <script th:src="@{/js/index.js}"></script>
-    <link rel="stylesheet" th:href="@{/css/result.css}">
+    <link rel="stylesheet" th:href="@{/css/pickDatesForm.css}">
 </head>
 <body>
 <div class="text-center">
@@ -28,8 +28,7 @@
 </div>
 
 <form id="form" name="form" class="form-inline d-flex flex-row justify-content-center align-items-center" action="#"
-      th:object="${dateRange}" method="post"
-      th:action="@{/test/cars}">
+      th:object="${dateRange}" method="post" th:action="@{/mas/car/all}">
 
     <div class="form-group" id="start">
         <label for="startDate">Start Date</label>
@@ -39,15 +38,11 @@
     <div class="form-group" id="end">
         <label for="endDate">End Date</label>
         <input id="endDate" name="endDate" type="text" class="form-control" th:value="*{to}" th:field="*{to}"/>
-
-        <!--        <input type="submit" value="Find Cars"/>-->
-
-
     </div>
+
     <button type="submit" class="btn btn-primary">Find Cars</button>
+
 </form>
-
-
 <script>
     var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
     $('#startDate').datepicker({

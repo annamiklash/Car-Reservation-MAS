@@ -9,10 +9,12 @@ import pjatk.mas.MAS.model.dto.ElectricCarImpl;
 import pjatk.mas.MAS.model.dto.MechanicsShop;
 import pjatk.mas.MAS.model.dto.RentalLocation;
 import pjatk.mas.MAS.model.enums.CarAvailabilityEnum;
+import pjatk.mas.MAS.model.exceptions.CustomErrorException;
 import pjatk.mas.MAS.repository.CarRepository;
 import pjatk.mas.MAS.repository.ElectricCarRepository;
 import pjatk.mas.MAS.repository.HybridCarRepository;
 import pjatk.mas.MAS.repository.ICECarRepository;
+import pjatk.mas.MAS.validator.model.Error;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -44,23 +46,18 @@ public class CarService {
     }
 
     public void saveCar(Car car) {
-//        final List<Error> errorList = CarValidator.validateCarToCreate(car);
-//
-//        if (errorList.size() > 0) {
-//            throw new RuntimeException(errorList.toString());
-//        }
-
         carRepository.save(car);
     }
-
-
 
     public Car findById(long id) {
         final Optional<Car> optionalCar = carRepository.findById(id);
         if (optionalCar.isEmpty()) {
-            throw new RuntimeException("No car with id " + id);
+            throw new CustomErrorException(Error.builder()
+                    .field("id")
+                    .value(String.valueOf(id))
+                    .description("No car with id " + id)
+                    .build());
         }
-
         return optionalCar.get();
     }
 
@@ -99,7 +96,7 @@ public class CarService {
 
     public void moveCarToRentalLocation(long carId, long rentalLocId) {
         final Car car = findById(carId);
-        final RentalLocation rentalLocation = rentalLocationService.findById(rentalLocId);
+        final RentalLocation rentalLocation = rentalLocationService.findLocationById(rentalLocId);
 
         rentalLocation.addCar(car);
 

@@ -8,6 +8,8 @@ import pjatk.mas.MAS.constants.Constants;
 import pjatk.mas.MAS.model.dto.Reservation;
 import pjatk.mas.MAS.model.dto.User;
 import pjatk.mas.MAS.model.enums.ReservationStatusEnum;
+import pjatk.mas.MAS.model.enums.UserTypeEnum;
+import pjatk.mas.MAS.model.exceptions.CustomErrorException;
 import pjatk.mas.MAS.repository.ReservationRepository;
 import pjatk.mas.MAS.repository.UserRepository;
 import pjatk.mas.MAS.validator.UserValidator;
@@ -25,6 +27,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+
     private final ReservationRepository reservationRepository;
 
 
@@ -46,8 +49,7 @@ public class UserService {
     public void addUser(User user) {
         final List<Error> errors = UserValidator.validateUserToCreate(user);
         if (errors.size() > 0) {
-            log.info(errors.toString());
-            throw new RuntimeException(errors.toString());
+            throw new CustomErrorException(errors);
         }
         userRepository.save(user);
     }
@@ -59,10 +61,18 @@ public class UserService {
             throw new NoSuchElementException("There is no customer with id " + id);
         }
         final User user = optionalCustomer.get();
+//        if (!user.isOldEnough()) {
+//            throw new CustomErrorException((Error.builder()
+//                    .field("age")
+//                    .description("Customer should be at least " + User.MIN_RESERVATION_CUSTOMER_YEAR + " to reserve a car")
+//                    .build()));
+//        }
         final boolean isVip = isVIPCustomer(user.getId());
 
         if (isVip) {
             user.setDiscount(Constants.VIP_DISCOUNT);
+            user.getUserType().add(UserTypeEnum.VIP_CUSTOMER);
+            addUser(user);
 
         } else {
             user.setDiscount(0);

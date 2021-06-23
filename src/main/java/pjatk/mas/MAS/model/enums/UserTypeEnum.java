@@ -1,6 +1,6 @@
 package pjatk.mas.MAS.model.enums;
 
-public enum UserType {
+public enum UserTypeEnum {
 
     USER,
     EMPLOYEE,

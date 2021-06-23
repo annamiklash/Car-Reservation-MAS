@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Reserve a Car</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
 
@@ -13,7 +13,8 @@
 <div class="d-flex align-items-center justify-content-center">
     <div class="p-2 bd-highlight col-example">
         <label for="from">Pick up date:</label>
-        <input type="text" id="from" name="from" th:value="${session.reservation.dateFrom.toString()}" disabled> <br><br>
+        <input type="text" id="from" name="from" th:value="${session.reservation.dateFrom.toString()}" disabled>
+        <br><br>
     </div>
     <div class=" p-2 bd-highlight col-example">
         <label for="to">Drop off date:</label>
@@ -31,7 +32,8 @@
             <div th:text="${session.location.address.zipCode}"></div>
         </div>
     </div>
-</div><br>
+</div>
+<br>
 <div class="container">
     <div id="mainInfo">
         <div class="car-make" th:text="${session.reservation.car.make}"></div>
@@ -66,7 +68,8 @@
                 <div class="w-100"></div>
 
                 <div class="col-6 col-sm-4 attribute">Color(s)</div>
-                <div class="col-6 col-sm-4 value" th:each="item : ${session.reservation.car.color}" th:text="|${item}|"></div>
+                <div class="col-6 col-sm-4 value" th:each="item : ${session.reservation.car.color}"
+                     th:text="|${item}|"></div>
             </div>
         </div>
     </div>
@@ -84,14 +87,19 @@
                 <div class="w-100"></div>
 
                 <div class="col-6 col-sm-4 attribute">Last Maintenance Date</div>
-                <div class="col-6 col-sm-3 value" th:text="${session.reservation.car.lastMaintenanceInfo.inspectionDate}"></div>
+                <div class="col-6 col-sm-3 value"
+                     th:text="${session.reservation.car.lastMaintenanceInfo.inspectionDate}"></div>
 
             </div>
         </div>
     </div>
 </div>
 <div class="text-center">
-    <button type="button" class="btn btn-primary" th:onclick="'javascript:carReserved();'">
+    <span th:if="${!session.reservation.user?.isOldEnough()}" style="color: red">You are not old enough</span>
+</div>
+<div class="text-center">
+    <button type="button" class="btn btn-primary" th:disabled="${!session.reservation.user.isOldEnough()}"
+            th:onclick="'javascript:carReserved();'">
         Reserve
     </button>
 </div>

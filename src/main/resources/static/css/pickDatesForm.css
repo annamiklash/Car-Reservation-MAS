@@ -12,3 +12,6 @@ label {
     padding-right: 7px;
 }
 
+.error {
+    color: red;
+}

@@ -9,7 +9,9 @@ import pjatk.mas.MAS.model.dto.Insurance;
 import pjatk.mas.MAS.model.dto.Reservation;
 import pjatk.mas.MAS.model.dto.User;
 import pjatk.mas.MAS.model.enums.ReservationStatusEnum;
+import pjatk.mas.MAS.model.exceptions.CustomErrorException;
 import pjatk.mas.MAS.repository.ReservationRepository;
+import pjatk.mas.MAS.validator.model.Error;
 
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -34,7 +36,11 @@ public class ReservationService {
     public Reservation createReservation(long customerId, long carId, LocalDate from, LocalDate to) {
         final User user = userService.findCustomerById(customerId);
         if (user.getAge() < User.MIN_RESERVATION_CUSTOMER_YEAR) {
-            throw new RuntimeException("Customer under " + User.MIN_RESERVATION_CUSTOMER_YEAR + " cannot reserve a car");
+            throw new CustomErrorException(Error.builder()
+                    .field("Customer age")
+                    .value(String.valueOf(user.getAge()))
+                    .description("Customer under " + User.MIN_RESERVATION_CUSTOMER_YEAR + " cannot reserve a car")
+                    .build());
         }
         final Car car = carService.findById(carId);
 
@@ -61,7 +67,7 @@ public class ReservationService {
 
 
     public void saveReservation(Reservation reservation) {
-        reservationRepository.saveAndFlush(reservation);
+        reservationRepository.save(reservation);
     }
 
     public ImmutableList<Reservation> findAllByCustomerId(long customerId) {
@@ -72,7 +78,11 @@ public class ReservationService {
     public Reservation findById(UUID id) {
         final Optional<Reservation> optionalReservation = reservationRepository.findById(id);
         if (optionalReservation.isEmpty()) {
-            throw new RuntimeException("Reservation with id " + id + " does not exist");
+            throw new CustomErrorException(Error.builder()
+                    .field("ID")
+                    .value(id.toString())
+                    .description("Reservation with id " + id + " does not exist")
+                    .build());
         }
         return optionalReservation.get();
     }

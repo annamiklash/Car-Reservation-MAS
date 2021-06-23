@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import pjatk.mas.MAS.model.dto.interfaces.car.IElectricCar;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

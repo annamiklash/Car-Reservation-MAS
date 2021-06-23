@@ -5,12 +5,12 @@ import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 import pjatk.mas.MAS.constants.RegexConstants;
-import pjatk.mas.MAS.interfaces.user.Admin;
-import pjatk.mas.MAS.interfaces.user.Customer;
-import pjatk.mas.MAS.interfaces.user.Employee;
-import pjatk.mas.MAS.interfaces.user.VIP;
+import pjatk.mas.MAS.model.dto.interfaces.user.Admin;
+import pjatk.mas.MAS.model.dto.interfaces.user.Customer;
+import pjatk.mas.MAS.model.dto.interfaces.user.Employee;
+import pjatk.mas.MAS.model.dto.interfaces.user.VIP;
 import pjatk.mas.MAS.model.enums.AdminAccessLevel;
-import pjatk.mas.MAS.model.enums.UserType;
+import pjatk.mas.MAS.model.enums.UserTypeEnum;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -85,12 +85,16 @@ public class User implements Serializable, Employee, Customer, VIP, Admin {
     @Length(min = 10, max = 10)
     private String pesel;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_rental_location", nullable = true)
+    private RentalLocation workplace;
+
     @ElementCollection
     @CollectionTable(name = "user_type", joinColumns = @JoinColumn(name = "id_user"))
     @Builder.Default
     @Enumerated(EnumType.STRING)
     @NotNull
-    private Set<UserType> userType = new HashSet<>();
+    private Set<UserTypeEnum> userType = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @ToString.Exclude
@@ -98,7 +102,6 @@ public class User implements Serializable, Employee, Customer, VIP, Admin {
     @Builder.Default
     @JsonIgnore
     private Set<Reservation> customerReservations = new HashSet<>();
-
 
     public void addReservation(@NotNull Reservation reservation) {
         customerReservations.add(reservation);
@@ -109,7 +112,11 @@ public class User implements Serializable, Employee, Customer, VIP, Admin {
     }
 
     public Integer getAge() {
-        return Period.between(birthdate, LocalDate.now()).getYears();
+        return Period.between(this.birthdate, LocalDate.now()).getYears();
+    }
+
+    public Boolean isOldEnough() {
+        return MIN_RESERVATION_CUSTOMER_YEAR - this.getAge() <= 0;
     }
 
 }

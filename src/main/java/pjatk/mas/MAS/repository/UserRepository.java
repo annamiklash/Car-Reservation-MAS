@@ -16,10 +16,22 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findCustomerById(@Param("id") Long id);
 
 
-    @Query("select u from users u where u.username is not null")
+//    @Query(nativeQuery = true,
+//            value = "select u from users u " +
+//                    "join user_type ut on u.id_user=ut.id_user " +
+//                    "where ut.user_type='CUSTOMER' and u.id_user=:id")
+//    Optional<User> findCustomerById(@Param("id") Long id);
+
+    @Query(nativeQuery = true,
+            value = "select u from users u " +
+            "join user_type ut on u.id_user=ut.id_user " +
+                    "where ut.user_type='CUSTOMER'")
     List<User> findAllCustomers();
 
-    @Query("select u from users u where u.pesel is not null")
+    @Query(nativeQuery = true,
+            value = "select u from users u " +
+                    "join user_type ut on u.id_user=ut.id_user " +
+                    "where ut.user_type='EMPLOYEE'")
     List<User> findAllEmployees();
 
 
