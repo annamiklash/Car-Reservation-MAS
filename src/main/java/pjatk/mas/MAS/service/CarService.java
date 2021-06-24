@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Business logic layer for entity Car
+ */
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -35,20 +38,25 @@ public class CarService {
     private final ElectricCarRepository electricCarRepository;
 
 
+    /**
+     * @return list of all cars stored in DB
+     */
     public ImmutableList<Car> findAll() {
         final List<Car> carList = carRepository.findAll();
         return ImmutableList.copyOf(carList);
     }
 
-    public ImmutableList<Car> findAllAvailableForReservationByLocationId(long id, String from, String to) {
-        final List<Car> cars = carRepository.findAllByRentalLocation_Id(id, LocalDate.parse(from), LocalDate.parse(to));
-        return ImmutableList.copyOf(cars);
-    }
-
+    /**
+     * @param car a car to be save in db
+     */
     public void saveCar(Car car) {
         carRepository.save(car);
     }
 
+    /**
+     * @param id car ID
+     * @return car with Id specified in param
+     */
     public Car findById(long id) {
         final Optional<Car> optionalCar = carRepository.findById(id);
         if (optionalCar.isEmpty()) {
@@ -61,11 +69,22 @@ public class CarService {
         return optionalCar.get();
     }
 
+    /**
+     * @return all electric cars stored in db
+     */
     public ImmutableList<ElectricCarImpl> findAllElectric() {
         final List<ElectricCarImpl> all = electricCarRepository.findAllElectric();
         return ImmutableList.copyOf(all);
     }
 
+    /**
+     * find all available vehicles
+     *
+     * @param id   location id
+     * @param from pick up date
+     * @param to   drop off date
+     * @return list of available cars for a given location id and between given dates
+     */
     public ImmutableList<Car> findAllAvailableCarsByRentalLocationId(Long id, LocalDate from, LocalDate to) {
         List<Car> carsList = carRepository.findAllByRentalLocation_Id(id, from, to);
         carsList = carsList.stream()
@@ -75,11 +94,19 @@ public class CarService {
         return ImmutableList.copyOf(carsList);
     }
 
+    /**
+     * @param id mechanics shop id
+     * @return list of cars located at mechanics shop
+     */
     public ImmutableList<Car> findAllCarsAtMechanicsShopByShopId(Long id) {
         final List<Car> carsList = carRepository.findAllByMechanicsShop_Id(id);
         return ImmutableList.copyOf(carsList);
     }
 
+    /**
+     * @param carId car ID
+     * @param mechanicsShopId mechanics shop ID
+     */
     public void moveCarToMechanicsShop(long carId, long mechanicsShopId) {
         final Car car = findById(carId);
         final MechanicsShop mechanicsShop = mechanicsShopService.findById(mechanicsShopId);
@@ -94,6 +121,10 @@ public class CarService {
         mechanicsShopService.save(mechanicsShop);
     }
 
+    /**
+     * @param carId car ID
+     * @param rentalLocId rental location ID
+     */
     public void moveCarToRentalLocation(long carId, long rentalLocId) {
         final Car car = findById(carId);
         final RentalLocation rentalLocation = rentalLocationService.findLocationById(rentalLocId);
@@ -108,8 +139,4 @@ public class CarService {
         rentalLocationService.saveLocation(rentalLocation);
     }
 
-    public Integer getYearsSinceManufactureYear(long carId) {
-        final Car car = findById(carId);
-        return LocalDate.now().getYear() - car.getManufactureYear();
-    }
 }

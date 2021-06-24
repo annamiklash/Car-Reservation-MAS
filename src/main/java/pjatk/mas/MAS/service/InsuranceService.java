@@ -12,6 +12,9 @@ import pjatk.mas.MAS.validator.model.Error;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Business logic layer for entity Insurance
+ */
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -20,11 +23,18 @@ public class InsuranceService {
     private final InsuranceRepository insuranceRepository;
 
 
+    /**
+     * @return list of all insurances stored in DB
+     */
     public ImmutableList<Insurance> findAllInsurances() {
         final List<Insurance> insurances = insuranceRepository.findAll();
         return ImmutableList.copyOf(insurances);
     }
 
+    /**
+     * @param id insurance id
+     * @return insurance object with id specified in param
+     */
     public Insurance findById(Long id) {
         final Optional<Insurance> optionalInsurance = insuranceRepository.findById(id);
         if (optionalInsurance.isEmpty()) {
@@ -38,6 +48,9 @@ public class InsuranceService {
     }
 
 
+    /**
+     * @param insurance save insurance to DB
+     */
     public void saveInsurance(Insurance insurance) {
         insuranceRepository.save(insurance);
     }

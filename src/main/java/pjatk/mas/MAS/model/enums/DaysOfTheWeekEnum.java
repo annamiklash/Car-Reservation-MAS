@@ -1,8 +1,9 @@
 package pjatk.mas.MAS.model.enums;
 
-import lombok.Getter;
 
-@Getter
+/**
+ * Day of the week
+ */
 public enum DaysOfTheWeekEnum {
     MONDAY,
     TUESDAY,

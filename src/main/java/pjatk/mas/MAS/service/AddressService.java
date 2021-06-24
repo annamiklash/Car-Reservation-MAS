@@ -9,18 +9,31 @@ import pjatk.mas.MAS.repository.AddressRepository;
 
 import java.util.List;
 
+/**
+ * Business logic layer for entity Address
+ */
 @Service
 @AllArgsConstructor
 @Slf4j
 public class AddressService {
 
-    private AddressRepository addressRepository;
+    private final AddressRepository addressRepository;
 
+    /**
+     * get all addresses
+     *
+     * @return list of all addresses
+     */
     public ImmutableList<Address> findAll() {
         final List<Address> addresses = addressRepository.findAll();
         return ImmutableList.copyOf(addresses);
     }
 
+    /**
+     * save address to DB
+     *
+     * @param address address to be save to db
+     */
     public void saveAddress(Address address) {
         addressRepository.save(address);
     }

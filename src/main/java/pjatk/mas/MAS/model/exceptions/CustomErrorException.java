@@ -4,6 +4,9 @@ import pjatk.mas.MAS.validator.model.Error;
 
 import java.util.List;
 
+/**
+ * Custom exception
+ */
 public class CustomErrorException extends RuntimeException {
 
     private List<Error> errors;

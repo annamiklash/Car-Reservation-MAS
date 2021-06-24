@@ -16,6 +16,9 @@ import java.util.UUID;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
+/**
+ * Business logic layer for entity Invoice
+ */
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -27,8 +30,14 @@ public class InvoiceService {
 
     private final UserService userService;
 
+    /**
+     * Method to generate invoice based on reservation ID
+     *
+     * @param reservationId reservation ID
+     * @return newly created Invoice for a given reservation
+     */
     @Transactional
-    public Invoice generateBill(UUID reservationId) {
+    public Invoice generateInvoice(UUID reservationId) {
         final Reservation reservation = reservationService.findById(reservationId);
 
         final LocalDate dateFrom = reservation.getDateFrom();
@@ -46,21 +55,20 @@ public class InvoiceService {
         final Integer totalCost = carInsuranceCost + carReservationCost;
         final Invoice invoice = Invoice.builder()
                 .id(reservationId)
-                .isPayed(false)
                 .totalCost(totalCost).build();
 
         final User user = reservation.getUser();
 
         if (userService.isVIPCustomer(user.getId())) {
             final Integer discountAmount = (totalCost * user.getDiscount()) / 100;
-            invoice.setDiscountAmount(discountAmount);
+            invoice.setDiscountedAmount(discountAmount);
             invoice.setAmountAfterDiscount(totalCost - discountAmount);
 
             saveInvoice(invoice);
             return invoice;
         }
 
-        invoice.setDiscountAmount(0);
+        invoice.setDiscountedAmount(0);
         invoice.setAmountAfterDiscount(totalCost);
         saveInvoice(invoice);
 
@@ -68,6 +76,9 @@ public class InvoiceService {
 
     }
 
+    /**
+     * @param invoice save invoice to DB
+     */
     public void saveInvoice(Invoice invoice) {
         invoiceRepository.save(invoice);
     }

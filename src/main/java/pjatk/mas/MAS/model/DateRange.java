@@ -5,6 +5,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * Object required to store reservation dated in gui
+ */
 @Data
 public class DateRange {
 

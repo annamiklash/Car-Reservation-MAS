@@ -27,8 +27,16 @@ import static java.time.temporal.ChronoUnit.DAYS;
 @RequestMapping("mas/insurance")
 public class InsuranceController {
 
+    /**
+     * Business logic layer for entity Insurance
+     */
     private final InsuranceService insuranceService;
 
+    /**
+     * @param model   interface that defines a holder for model attribute
+     * @param request http request that stores session attributes
+     * @return html with list of insurances to choose from
+     */
     @GetMapping("/all")
     public String getAllInsurances(Model model, HttpServletRequest request) {
         final ImmutableList<Insurance> insuranceList = insuranceService.findAllInsurances();
@@ -42,6 +50,13 @@ public class InsuranceController {
         return "insuranceList";
     }
 
+
+    /**
+     * @param insIds  IDs of selected by customer insurances
+     * @param model   interface that defines a holder for model attribute
+     * @param request http request that stores session attributes
+     * @return html with summary of a reservation with information about car, customer, dates, amount of people and selected insurances
+     */
     @GetMapping("{insIds}")
     public String showReservationSummaryForm(@PathVariable List<Integer> insIds, Model model, HttpServletRequest request) {
 
@@ -51,7 +66,6 @@ public class InsuranceController {
 
         final InsuranceListContainer insurances = new InsuranceListContainer();
         insurances.setInsuranceList(selectedInsurances);
-
 
         final Reservation reservation = (Reservation) request.getSession().getAttribute("reservation");
 

@@ -24,10 +24,23 @@ import java.util.UUID;
 @RequestMapping("mas/car")
 public class CarController {
 
+    /**
+     * Business logic layer for entity Car
+     */
     private final CarService carService;
+
+    /**
+     * Business logic layer for entity User
+     */
     private final UserService userService;
 
 
+    /**
+     * @param request http request that stores session attributes
+     * @param dateRange contains pick up and drop off dates for reservation
+     * @param model interface that defines a holder for model attribute
+     * @return html document that contains list of available cars at previously chosen location for dates
+     */
     @PostMapping("/all")
     public String getAllAvailableCarsAtLocationForDates(HttpServletRequest request, @ModelAttribute DateRange dateRange, Model model) {
 
@@ -49,6 +62,12 @@ public class CarController {
         return "carList";
     }
 
+    /**
+     * @param id user selected car id
+     * @param model interface that defines a holder for model attribute
+     * @param request http request that stores session attributes
+     * @return html with information about selected car
+     */
     @GetMapping
     public String getCarDetails(@RequestParam Long id, Model model, HttpServletRequest request) {
         final Car car = carService.findById(id);

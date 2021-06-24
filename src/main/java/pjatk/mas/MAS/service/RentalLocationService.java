@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * Business logic layer for entity RentalLocation
+ */
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -24,11 +27,18 @@ public class RentalLocationService {
 
     private final RentalLocationRepository rentalLocationRepository;
 
+    /**
+     * @return list of all rental locations
+     */
     public ImmutableList<RentalLocation> findAllLocations() {
         final List<RentalLocation> all = rentalLocationRepository.findAll();
         return ImmutableList.copyOf(all);
     }
 
+    /**
+     * @param id rental location id
+     * @return rental location object with id specified in param
+     */
     public RentalLocation findLocationById(long id) {
         final Optional<RentalLocation> optionalRentalLocation = rentalLocationRepository.findById(id);
         if (optionalRentalLocation.isEmpty()) {
@@ -41,10 +51,18 @@ public class RentalLocationService {
         return optionalRentalLocation.get();
     }
 
+    /**
+     * @param rentalLocation rental location to save in DB
+     */
     public void saveLocation(RentalLocation rentalLocation) {
         rentalLocationRepository.save(rentalLocation);
     }
 
+
+    /**
+     * @param location location to temporarily close
+     * @param openingDateTime rental location future opening date and time
+     */
     public void temporarilyCloseLocation(RentalLocation location, LocalDateTime openingDateTime) {
         if (location.getBusinessHours() == null || location.getLocationType() == LocationTypeEnum.CLOSED) {
             throw new CustomErrorException(Error.builder()
@@ -60,6 +78,10 @@ public class RentalLocationService {
         saveLocation(location);
     }
 
+    /**
+     * @param location location to (re)open
+     * @param businessHours rental location business hours
+     */
     public void openLocation(RentalLocation location, Set<BusinessHours> businessHours) {
         if (location.getOpeningDateTime() == null || location.getLocationType() == LocationTypeEnum.OPEN) {
             throw new CustomErrorException(Error.builder()

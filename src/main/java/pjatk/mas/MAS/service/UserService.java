@@ -21,31 +21,45 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+/**
+ * Business logic layer for entity User
+ */
 @Service
 @AllArgsConstructor
 @Slf4j
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final ReservationRepository reservationRepository;
 
 
+    /**
+     * @return list of all users stored in DB
+     */
     public ImmutableList<User> findAll() {
         final List<User> users = userRepository.findAll();
         return ImmutableList.copyOf(users);
     }
 
+    /**
+     * @return list of all users if type Customer stored in DB
+     */
     public ImmutableList<User> findAllCustomers() {
         final List<User> customers = userRepository.findAllCustomers();
         return ImmutableList.copyOf(customers);
     }
 
+    /**
+     * @return list of all users of type Employee stored in DB
+     */
     public ImmutableList<User> findAllEmployees() {
         final List<User> employees = userRepository.findAllEmployees();
         return ImmutableList.copyOf(employees);
     }
 
+    /**
+     * @param user user to save in DB
+     */
     public void addUser(User user) {
         final List<Error> errors = UserValidator.validateUserToCreate(user);
         if (errors.size() > 0) {
@@ -54,6 +68,12 @@ public class UserService {
         userRepository.save(user);
     }
 
+    /**
+     * finds and validates correct user type of user by id
+     *
+     * @param id user id
+     * @return user object with id specified in param
+     */
     @Transactional
     public User findCustomerById(Long id) {
         final Optional<User> optionalCustomer = userRepository.findCustomerById(id);
@@ -61,12 +81,7 @@ public class UserService {
             throw new NoSuchElementException("There is no customer with id " + id);
         }
         final User user = optionalCustomer.get();
-//        if (!user.isOldEnough()) {
-//            throw new CustomErrorException((Error.builder()
-//                    .field("age")
-//                    .description("Customer should be at least " + User.MIN_RESERVATION_CUSTOMER_YEAR + " to reserve a car")
-//                    .build()));
-//        }
+
         final boolean isVip = isVIPCustomer(user.getId());
 
         if (isVip) {
@@ -76,16 +91,29 @@ public class UserService {
 
         } else {
             user.setDiscount(0);
+            if (user.getUserType().contains(UserTypeEnum.VIP_CUSTOMER)) {
+                user.getUserType().remove(UserTypeEnum.VIP_CUSTOMER);
+            }
         }
 
         return user;
     }
 
+    /**
+     * check whether user is a VIP Customer
+     *
+     * @param id user ID
+     * @return flag whether user is a VIP customer
+     */
     public boolean isVIPCustomer(long id) {
         final Integer customerReservations = countCustomerFinishedReservations(id);
         return customerReservations >= Constants.RESERVATIONS_FOR_VIP;
     }
 
+    /**
+     * @param customerId user id
+     * @return number of finished reservation in a year time from current time
+     */
     private Integer countCustomerFinishedReservations(long customerId) {
 
         final List<Reservation> allReservations = reservationRepository.findAllByUser_Id(customerId);

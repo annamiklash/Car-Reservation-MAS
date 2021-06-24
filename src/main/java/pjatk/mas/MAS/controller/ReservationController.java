@@ -18,8 +18,17 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("mas/reservation")
 public class ReservationController {
 
+    /**
+     * Business logic layer for entity Reservation
+     */
     private final ReservationService reservationService;
 
+    /**
+     * @param reservation reservation object that will be created once customer confirms it
+     * @param model       interface that defines a holder for model attribute
+     * @param request     http request that stores session attributes
+     * @return html with success message and reservation id
+     */
     @PostMapping
     public String showReservationConfirmation(@ModelAttribute Reservation reservation, Model model, HttpServletRequest request) {
 

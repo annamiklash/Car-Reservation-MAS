@@ -20,8 +20,17 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("mas/location")
 public class RentalLocationController {
 
+
+    /**
+     * Business logic layer for entity RentalLocation
+     */
     private final RentalLocationService rentalLocationService;
 
+    /**
+     * @param model   interface that defines a holder for model attribute
+     * @param request http request that stores session attributes
+     * @return html with list of all available locations
+     */
     @GetMapping("/all")
     public String getAllLocations(Model model, HttpServletRequest request) {
         final ImmutableList<RentalLocation> locations = rentalLocationService.findAllLocations();
@@ -31,6 +40,12 @@ public class RentalLocationController {
         return "locationList";
     }
 
+    /**
+     * @param id      ID of a selected by customer location to choose  a car from for given dates
+     * @param model   interface that defines a holder for model attribute
+     * @param request http request that stores session attributes
+     * @return html with from for entering pick up and drop off dates
+     */
     @GetMapping
     public String chooseDates(@RequestParam Long id, Model model, HttpServletRequest request) {
         final RentalLocation location = rentalLocationService.findLocationById(id);

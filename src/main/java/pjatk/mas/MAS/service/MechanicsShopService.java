@@ -10,6 +10,9 @@ import pjatk.mas.MAS.validator.model.Error;
 
 import java.util.Optional;
 
+/**
+ * Business logic layer for entity MechanicsShop
+ */
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -17,6 +20,10 @@ public class MechanicsShopService {
 
     private final MechanicsShopRepository mechanicsShopRepository;
 
+    /**
+     * @param id mechanics shop id
+     * @return mechanics shop object with id specified in param
+     */
     public MechanicsShop findById(long id) {
         final Optional<MechanicsShop> optional = mechanicsShopRepository.findById(id);
         if (optional.isEmpty()) {
@@ -29,6 +36,9 @@ public class MechanicsShopService {
         return optional.get();
     }
 
+    /**
+     * @param mechanicsShop mechanics shop to save in DB
+     */
     public void save(MechanicsShop mechanicsShop) {
         mechanicsShopRepository.save(mechanicsShop);
     }

@@ -11,6 +11,9 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+/**
+ * Class that represents a Сar with fuel type engine
+ */
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
 @Data
@@ -21,13 +24,21 @@ import javax.validation.constraints.NotNull;
 @DiscriminatorValue("FUEL")
 public class ICECar extends Car {
 
+    /**
+     * Number of exhaust pipes
+     */
     @NotNull
     private Integer exhaustPipeCount;
 
-
+    /**
+     * Amount of miles the car can drive on one gallon
+     */
     @NotNull
     private Integer milesPerGallon;
 
+    /**
+     * @return description of an ICE car in a string format
+     */
     @Override
     public String toString() {
         return super.toString() +

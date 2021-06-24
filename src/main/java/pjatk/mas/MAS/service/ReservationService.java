@@ -4,68 +4,36 @@ import com.google.common.collect.ImmutableList;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import pjatk.mas.MAS.model.dto.Car;
-import pjatk.mas.MAS.model.dto.Insurance;
 import pjatk.mas.MAS.model.dto.Reservation;
-import pjatk.mas.MAS.model.dto.User;
-import pjatk.mas.MAS.model.enums.ReservationStatusEnum;
 import pjatk.mas.MAS.model.exceptions.CustomErrorException;
 import pjatk.mas.MAS.repository.ReservationRepository;
 import pjatk.mas.MAS.validator.model.Error;
 
-import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Business logic layer for entity Reservation
+ */
 @Service
 @AllArgsConstructor
 @Slf4j
 public class ReservationService {
 
-    private final CarService carService;
     private final ReservationRepository reservationRepository;
-    private final UserService userService;
 
+    /**
+     * @return find all reservations stored in DB
+     */
     public ImmutableList<Reservation> findAll() {
         final List<Reservation> reservations = reservationRepository.findAllReservations();
         return ImmutableList.copyOf(reservations);
     }
 
-    public Reservation createReservation(long customerId, long carId, LocalDate from, LocalDate to) {
-        final User user = userService.findCustomerById(customerId);
-        if (user.getAge() < User.MIN_RESERVATION_CUSTOMER_YEAR) {
-            throw new CustomErrorException(Error.builder()
-                    .field("Customer age")
-                    .value(String.valueOf(user.getAge()))
-                    .description("Customer under " + User.MIN_RESERVATION_CUSTOMER_YEAR + " cannot reserve a car")
-                    .build());
-        }
-        final Car car = carService.findById(carId);
-
-        final Reservation reservation = Reservation.builder()
-                .id(UUID.randomUUID())
-                .car(car)
-                .user(user)
-                .dateFrom(from)
-                .dateTo(to)
-                .reservationStatus(ReservationStatusEnum.INCOMPLETE)
-                .build();
-
-        saveReservation(reservation);
-        return reservation;
-    }
-
-    public Reservation addReservationInsurance(List<Insurance> insurances, UUID reservationId) {
-        final Reservation reservation = findById(reservationId);
-        reservation.setInsurances(new HashSet<>(insurances));
-        reservation.setReservationStatus(ReservationStatusEnum.COMPLETE);
-        saveReservation(reservation);
-        return reservation;
-    }
-
-
+    /**
+     * @param reservation reservation to save in DB
+     */
     public void saveReservation(Reservation reservation) {
         reservationRepository.save(reservation);
     }
@@ -75,6 +43,10 @@ public class ReservationService {
         return ImmutableList.copyOf(reservationsList);
     }
 
+    /**
+     * @param id reservation id
+     * @return insurance object with id specified in param
+     */
     public Reservation findById(UUID id) {
         final Optional<Reservation> optionalReservation = reservationRepository.findById(id);
         if (optionalReservation.isEmpty()) {
